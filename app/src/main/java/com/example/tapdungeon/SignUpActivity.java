@@ -112,6 +112,9 @@ public class SignUpActivity extends AppCompatActivity {
         userMap.put("created", FieldValue.serverTimestamp());
         userMap.put("gold", 0);
         userMap.put("level", 1);
+        userMap.put("clan", null);
+        userMap.put("last_seen", FieldValue.serverTimestamp());
+        userMap.put("friends", new HashMap<>());
 
 
         // Add a new document with the user's UID as the document ID
@@ -120,7 +123,6 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.w("Firestore", "Error creating user document", e));
 
 
-        sendToMain();
     }
     private void sendToMain() {
         Intent intent = new Intent(this, MainActivity.class);
