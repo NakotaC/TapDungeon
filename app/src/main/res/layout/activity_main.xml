@@ -12,20 +12,103 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/welcome_guest"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.537"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.185" />
+        app:layout_constraintTop_toBottomOf="@+id/logoutBtn"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/logoutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="264dp"
+        android:layout_width="81dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="32dp"
         android:text="LogOut"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainText" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/socialButton"
+        android:layout_width="79dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="316dp"
+        android:layout_marginTop="40dp"
+        android:background="#7A3A1C"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/social" />
+
+    <Button
+        android:id="@+id/upgradeMenuButton"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="Upgrades"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GameFrameLayout" />
+
+    <FrameLayout
+        android:id="@+id/GameFrameLayout"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainText">
+
+        <ImageView
+            android:id="@+id/GameBackgroundImage"
+            android:layout_width="724dp"
+            android:layout_height="523dp"
+            android:scaleType="centerCrop"
+            android:translationX="-150dp"
+            app:srcCompat="@drawable/dungeonbackground" />
+
+
+        <ProgressBar
+            android:id="@+id/enemyHealthBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="300dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:progressDrawable="@drawable/health_bar"
+            tools:progress="60" />
+
+        <ImageView
+            android:id="@+id/monsterImageView"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:scaleType="fitCenter"
+            android:translationY="-10dp"
+            app:srcCompat="@drawable/skeleton" />
+
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/SkillTreeButton"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="Skills"
+        app:layout_constraintStart_toEndOf="@+id/upgradeMenuButton"
+        app:layout_constraintTop_toBottomOf="@+id/GameFrameLayout" />
+
+    <Button
+        android:id="@+id/PrestigeButton"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="Go Home"
+        app:layout_constraintStart_toEndOf="@+id/SkillTreeButton"
+        app:layout_constraintTop_toBottomOf="@+id/GameFrameLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
