@@ -7,6 +7,11 @@ android {
     namespace = "com.example.tapdungeon"
     compileSdk = 36
 
+
+    aaptOptions {
+        noCompress("mp3", "wav", "ogg", "m4a")
+    }
+
     defaultConfig {
         applicationId = "com.example.tapdungeon"
         minSdk = 24

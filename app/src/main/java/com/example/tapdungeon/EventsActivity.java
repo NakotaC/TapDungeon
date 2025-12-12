@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.yourapp.adapters.EventsAdapter;
+import com.example.tapdungeon.data.model.EventsAdapter;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -39,7 +39,9 @@ public class EventsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.events_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new EventsAdapter(inboxItems);
+        adapter = new EventsAdapter(inboxItems, event -> {
+            //TODO handle click on event
+        });
         recyclerView.setAdapter(adapter);
 
         loadInboxItems();

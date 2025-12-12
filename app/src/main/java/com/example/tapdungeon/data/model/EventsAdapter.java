@@ -1,4 +1,4 @@
-package com.example.yourapp.adapters;
+package com.example.tapdungeon.data.model;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +34,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.events_recycler_view, parent, false);
+                .inflate(R.layout.item_event, parent, false);
 
         return new EventViewHolder(view);
     }

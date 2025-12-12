@@ -16,9 +16,13 @@
             android:exported="false"
             android:label="@string/title_activity_login" />
         <activity
+            android:name=".EventsActivity"
+            android:exported="false"
+            android:label="EventsActivity" />
+        <activity
             android:name=".SignUpActivity"
             android:exported="false"
-            android:label="@string/title_activity_login" />
+            android:label="SignupActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

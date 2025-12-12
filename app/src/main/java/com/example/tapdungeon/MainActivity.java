@@ -1,6 +1,7 @@
 package com.example.tapdungeon;
 
 import android.content.Intent;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -11,21 +12,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tapdungeon.social.SocialDialogFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import com.example.tapdungeon.LoginActivity;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Collections;
@@ -35,7 +30,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    Button logoutBtn;
+    Button logoutBtn, eventButton;
     ImageButton socialButton;
     private FirebaseFirestore db;
     private ProgressBar enemyHealthBar;
@@ -43,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private MonsterModel currentEnemy;
     private PlayerModel player;
     TextView welcomeText;
+    private SoundPool soundPool;
+    private int playerAttackSoundId;
+    private int monsterDeathSoundId;
+    private boolean soundsLoaded = false;
 
 
 
@@ -63,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         logoutBtn = findViewById(R.id.logoutBtn);
+        eventButton = findViewById(R.id.eventButton);
         socialButton = findViewById(R.id.socialButton);
         enemyHealthBar = findViewById(R.id.enemyHealthBar);
         monsterImageView = findViewById(R.id.monsterImageView);
@@ -71,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
         logoutBtn.setOnClickListener(v -> {
             mAuth.signOut();
             sendToLogin();
+        });
+
+        eventButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EventsActivity.class);
+            startActivity(intent);
         });
 
         socialButton.setOnClickListener(v -> {
@@ -82,6 +87,21 @@ public class MainActivity extends AppCompatActivity {
             dealDamageToEnemy(player.getDamagePerTap());
         });
 
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(5)
+                .build();
+
+        soundPool.setOnLoadCompleteListener((soundPool, sampleId, status) -> {
+            if (status == 0) {
+                soundsLoaded = true;
+                Log.d("SoundPool", "Sounds loaded successfully.");
+            } else {
+                Log.e("SoundPool", "Error loading sound, status: " + status);
+            }
+        });
+
+        playerAttackSoundId = soundPool.load(this, R.raw.player_attack, 1);
+        monsterDeathSoundId = soundPool.load(this, R.raw.monster_death, 1);
 
     }
 
@@ -189,6 +209,15 @@ public class MainActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> Log.e("Firestore", "Error saving player data", e));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Release the SoundPool resources
+        if (soundPool != null) {
+            soundPool.release();
+            soundPool = null;
+        }
+    }
     private void sendToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
@@ -208,8 +237,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        currentEnemy.takeDamage(damage);
+        if (soundsLoaded) {
+            soundPool.play(playerAttackSoundId, 1.0f, 1.0f, 0, 0, 1.25f);
+        }
 
+        currentEnemy.takeDamage(damage);
         updateHealthBar();
 
         if (currentEnemy.isDead()) {
@@ -230,6 +262,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void playEnemyDeathAnimation() {
+        if (soundsLoaded) {
+            soundPool.play(monsterDeathSoundId, 1.0f, 1.0f, 0, 0, 1.0f);
+        }
         monsterImageView.animate()
                 .rotation(90f)
                 .translationY(200f)
