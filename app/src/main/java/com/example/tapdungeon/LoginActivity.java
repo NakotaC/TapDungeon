@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText emailEditText, passwordEditText;
-    private Button loginButton, signUpButton; // Added signUpButton
+    private Button loginButton, signUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

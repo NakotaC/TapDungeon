@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import com.example.tapdungeon.LoginActivity;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Collections;
@@ -104,9 +105,11 @@ public class MainActivity extends AppCompatActivity {
                             Map<String, Object> friendsMap = Collections.emptyMap();
                             Object upgradesObject = documentSnapshot.get("upgrades");
                             Map<String, Object> upgradesMap = Collections.emptyMap();
-                            Object skillsObject = documentSnapshot.get("friends");
+                            Object skillsObject = documentSnapshot.get("skills");
                             Map<String, Object> skillsMap = Collections.emptyMap();
                             Long killsOnLevel = documentSnapshot.getLong("killsOnLevel");
+                            com.google.firebase.Timestamp lastSeenTimestamp = documentSnapshot.getTimestamp("last_seen");
+
 
                             if (friendsObject instanceof Map) {
                                 friendsMap = (Map<String, Object>) friendsObject;
@@ -122,15 +125,34 @@ public class MainActivity extends AppCompatActivity {
                                 skillsMap = (Map<String, Object>) skillsObject;
                                 Log.d("Firestore", "Friends map loaded: " + friendsMap.toString());
                             }
-
                             player = new PlayerModel(currentUser.getUid(), username, clan, level, gold, friendsMap, upgradesMap, skillsMap, killsOnLevel);
 
-                            welcomeText.setText(player.getDisplayName() + "\nKills: " + player.getKillsOnLevel() + " Level: " + player.getLevel() + " Gold: " + player.getGold());
-                            Log.d("Firestore", "User data loaded successfully.");
-                            spawnNewEnemy();
-                        } else {
-                            Log.w("Firestore", "User document does not exist for UID: " + currentUser.getUid());
-                            welcomeText.setText("Welcome! (Could not load user data)");
+                            if (lastSeenTimestamp != null) {
+                                com.google.firebase.Timestamp currentTime = new com.google.firebase.Timestamp(new java.util.Date());
+                                long timeAwayInSeconds = currentTime.getSeconds() - lastSeenTimestamp.getSeconds();
+
+
+                                final int GOLD_PER_MINUTE = 1;
+                                if (timeAwayInSeconds > 60) {
+                                    long minutesAway = timeAwayInSeconds / 60;
+                                    long goldEarned = minutesAway * GOLD_PER_MINUTE;
+
+                                    if (goldEarned > 0) {
+                                        player.addGold(goldEarned);
+                                        String toastMessage = "You were gone " + minutesAway + " minutes. You earned " + goldEarned + " gold.";
+                                        Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                welcomeText.setText(player.getDisplayName() + "\nKills: " + player.getKillsOnLevel() + " Level: " + player.getLevel() + " Gold: " + player.getGold());
+                                Log.d("Firestore", "User data loaded successfully.");
+                                Toast lastSeenToast = new Toast(this);
+                                lastSeenToast.setText("Last seen: " + player.getLastSeenDiff());
+                                spawnNewEnemy();
+                            } else {
+                                Log.w("Firestore", "User document does not exist for UID: " + currentUser.getUid());
+                                welcomeText.setText("Welcome! (Could not load user data)");
+                            }
                         }
                     })
                     .addOnFailureListener(e -> {
@@ -139,6 +161,32 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if (currentUser == null || player == null) {
+                Log.w("Firestore", "Cannot save data. User or player data is null.");
+                return;
+            }
+
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("gold", player.getGold());
+            userData.put("level", player.getLevel());
+            userData.put("killsOnLevel", player.getKillsOnLevel());
+            userData.put("upgrades", player.getUpgrades());
+            userData.put("skills", player.getSkills());
+            userData.put("friends", player.getFriends());
+        userData.put("last_seen", new java.util.Date());
+        userData.put("clan", player.getClan());
+
+
+            db.collection("users").document(currentUser.getUid())
+                    .update(userData)
+                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Player data successfully saved!"))
+                    .addOnFailureListener(e -> Log.e("Firestore", "Error saving player data", e));
     }
 
     private void sendToLogin() {

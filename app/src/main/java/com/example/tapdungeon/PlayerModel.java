@@ -1,12 +1,12 @@
 package com.example.tapdungeon;
 
+
 import java.util.Map;
 
 public class PlayerModel {
     private String userId;
     private String displayName;
     private String clan;
-    private int health;
     private int gold;
     private int level;
     private int killsOnLevel;
@@ -29,7 +29,6 @@ public class PlayerModel {
         this.killsOnLevel = killsOnLevel.intValue();
         this.skills = skills;
         this.friends = friends;
-        calculateHealth();
         calculateDamagePerTap(upgrades, skills);
         calculateDamagePerSecond(upgrades, skills);
     }
@@ -42,9 +41,8 @@ public class PlayerModel {
         this.damagePerSecond = this.level * 0;
 
     }
-    public void calculateHealth(){
-        this.health = this.level * 10;
-
+    public Long getLastSeenDiff(){
+return (long) 0;
     }
 
     public Map<String, Object> getFriends() {
@@ -78,6 +76,14 @@ public class PlayerModel {
         return killsOnLevel;
     }
 
+    public Map<String, Object> getUpgrades() {
+        return upgrades;
+    }
+    public Map<String, Object> getSkills() {
+        return skills;
+    }
+
+
 
     public void enemyKilled(MonsterModel enemy){
         this.gold += enemy.getGold();
@@ -85,10 +91,13 @@ public class PlayerModel {
         if (killsOnLevel % 10 == 0){
             this.level += 1;
             killsOnLevel = 0;
-            calculateHealth();
             calculateDamagePerTap(upgrades, skills);
             calculateDamagePerSecond(upgrades, skills);
         }
+    }
+
+    public void addGold(long goldEarned) {
+        this.gold += (int) goldEarned * this.level;
     }
 }
 
