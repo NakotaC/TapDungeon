@@ -128,16 +128,18 @@ public class MainActivity extends AppCompatActivity {
                             player = new PlayerModel(currentUser.getUid(), username, clan, level, gold, friendsMap, upgradesMap, skillsMap, killsOnLevel);
 
                             if (lastSeenTimestamp != null) {
-                                com.google.firebase.Timestamp currentTime = null;
+                                com.google.firebase.Timestamp currentTime = new com.google.firebase.Timestamp(new java.util.Date());
                                 long timeAwayInSeconds = currentTime.getSeconds() - lastSeenTimestamp.getSeconds();
 
-                                final int GOLD_PER_10_SECONDS = 1;
-                                if (timeAwayInSeconds > 0) {
-                                    long goldEarned = (timeAwayInSeconds / 10) * GOLD_PER_10_SECONDS;
+
+                                final int GOLD_PER_MINUTE = 1;
+                                if (timeAwayInSeconds > 60) {
+                                    long minutesAway = timeAwayInSeconds / 60;
+                                    long goldEarned = minutesAway * GOLD_PER_MINUTE;
 
                                     if (goldEarned > 0) {
                                         player.addGold(goldEarned);
-                                        String toastMessage = "Welcome back! You earned " + goldEarned + " gold while you were away.";
+                                        String toastMessage = "You were gone " + minutesAway + " minutes. You earned " + goldEarned + " gold.";
                                         Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_LONG).show();
                                     }
                                 }
@@ -162,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
             FirebaseUser currentUser = mAuth.getCurrentUser();
             if (currentUser == null || player == null) {
                 Log.w("Firestore", "Cannot save data. User or player data is null.");
@@ -177,8 +179,8 @@ public class MainActivity extends AppCompatActivity {
             userData.put("upgrades", player.getUpgrades());
             userData.put("skills", player.getSkills());
             userData.put("friends", player.getFriends());
-            userData.put("last_seen", FieldValue.serverTimestamp());
-            userData.put("clan", player.getClan());
+        userData.put("last_seen", new java.util.Date());
+        userData.put("clan", player.getClan());
 
 
             db.collection("users").document(currentUser.getUid())

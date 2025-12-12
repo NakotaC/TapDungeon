@@ -95,5 +95,9 @@ return (long) 0;
             calculateDamagePerSecond(upgrades, skills);
         }
     }
+
+    public void addGold(long goldEarned) {
+        this.gold += (int) goldEarned * this.level;
+    }
 }
 

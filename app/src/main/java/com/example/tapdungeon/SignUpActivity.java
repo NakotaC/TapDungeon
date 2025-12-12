@@ -114,7 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
         userMap.put("killsOnLevel", 0);
         userMap.put("level", 1);
         userMap.put("clan", null);
-        userMap.put("last_seen", FieldValue.serverTimestamp());
+        userMap.put("last_seen", new java.util.Date());
         userMap.put("friends", new HashMap<>());
         userMap.put("upgrades", new HashMap<>());
         userMap.put("skills", new HashMap<>());
