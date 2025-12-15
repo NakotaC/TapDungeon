@@ -11,8 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tapdungeon.R;
 import java.util.List;
 
+/**
+ * Adapter for the all clans list in the social dialog.
+ */
 public class AllClansAdapter extends RecyclerView.Adapter<AllClansAdapter.ClanViewHolder> {
 
+    /**
+     * Interface for the join button click listener.
+     */
     public interface OnJoinClickListener {
         void onJoinClick(Clan clan, Button joinButton);
     }
@@ -20,12 +26,25 @@ public class AllClansAdapter extends RecyclerView.Adapter<AllClansAdapter.ClanVi
     private final List<Clan> clanList;
     private OnJoinClickListener listener;
 
+    /**
+     * Constructor for the all clans adapter.
+     * @param clanList list of clans
+     */
     public AllClansAdapter(List<Clan> clanList) {
         this.clanList = clanList;
     }
+
+    /**
+     * Sets the listener for the join button click.
+     * @param listener the listener to set
+     */
     public void setOnJoinClickListener(OnJoinClickListener listener) {
         this.listener = listener;
     }
+
+    /**
+     * Creates a new ViewHolder for the adapter.
+     */
     @NonNull
     @Override
     public ClanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -33,6 +52,9 @@ public class AllClansAdapter extends RecyclerView.Adapter<AllClansAdapter.ClanVi
         return new ClanViewHolder(view);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     */
     @Override
     public void onBindViewHolder(@NonNull ClanViewHolder holder, int position) {
         Clan clan = clanList.get(position);
@@ -45,6 +67,9 @@ public class AllClansAdapter extends RecyclerView.Adapter<AllClansAdapter.ClanVi
         });
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     */
     @Override
     public int getItemCount() {
         return clanList.size();

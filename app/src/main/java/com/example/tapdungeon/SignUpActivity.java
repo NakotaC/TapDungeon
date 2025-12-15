@@ -18,11 +18,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Activity for user sign up.
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText emailEditText, usernameEditText, passwordEditText;
-    private Button loginButton, signUpButton; // Added signUpButton
+    private Button loginButton, signUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +91,9 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("Auth", "User profile updated with username.");
-                        // Step 3: Now that the user object has the username, save to Firestore
                         saveUserToFirestore(user);
                     } else {
                         Log.w("Auth", "Failed to update user profile.", task.getException());
-                        // Even if profile update fails, try to save what we have and proceed
                         saveUserToFirestore(user);
                     }
                 });
@@ -119,8 +120,6 @@ public class SignUpActivity extends AppCompatActivity {
         userMap.put("upgrades", new HashMap<>());
         userMap.put("skills", new HashMap<>());
 
-
-        // Add a new document with the user's UID as the document ID
         db.collection("users").document(user.getUid()).set(userMap)
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "User document successfully created!"))
                 .addOnFailureListener(e -> Log.w("Firestore", "Error creating user document", e));
@@ -135,10 +134,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
         if (mAuth.getCurrentUser() != null) {
-           // sendToMain();
+            sendToMain();
         }
     }
 }

@@ -16,6 +16,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Activity for user login.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -79,10 +82,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
         if (mAuth.getCurrentUser() != null) {
-           // sendToMain();
+           //sendToMain();
         }
     }
 }

@@ -27,6 +27,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Activity for the main game screen.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
                             String username = documentSnapshot.getString("username");
-                            Long gold = documentSnapshot.getLong("gold"); // Use getLong for numbers
+                            Long gold = documentSnapshot.getLong("gold");
                             Long level = documentSnapshot.getLong("level");
                             String clan = documentSnapshot.getString("clan");
                             Object friendsObject = documentSnapshot.get("friends");
@@ -166,8 +169,6 @@ public class MainActivity extends AppCompatActivity {
 
                                 welcomeText.setText(player.getDisplayName() + "\nKills: " + player.getKillsOnLevel() + " Level: " + player.getLevel() + " Gold: " + player.getGold());
                                 Log.d("Firestore", "User data loaded successfully.");
-                                Toast lastSeenToast = new Toast(this);
-                                lastSeenToast.setText("Last seen: " + player.getLastSeenDiff());
                                 spawnNewEnemy();
                             } else {
                                 Log.w("Firestore", "User document does not exist for UID: " + currentUser.getUid());
@@ -199,8 +200,8 @@ public class MainActivity extends AppCompatActivity {
             userData.put("upgrades", player.getUpgrades());
             userData.put("skills", player.getSkills());
             userData.put("friends", player.getFriends());
-        userData.put("last_seen", new java.util.Date());
-        userData.put("clan", player.getClan());
+            userData.put("last_seen", new java.util.Date());
+            userData.put("clan", player.getClan());
 
 
             db.collection("users").document(currentUser.getUid())
@@ -245,9 +246,7 @@ public class MainActivity extends AppCompatActivity {
         updateHealthBar();
 
         if (currentEnemy.isDead()) {
-//            Toast.makeText(this, "Enemy defeated!", Toast.LENGTH_SHORT).show();
             player.enemyKilled(currentEnemy);
-
             playEnemyDeathAnimation();
             updatePlayerInfo();
         }

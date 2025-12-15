@@ -29,6 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Fragment for the clan tab in the social dialog.
+ */
 public class ClanFragment extends Fragment implements AllClansAdapter.OnJoinClickListener{
 
     private static final String TAG = "ClanFragment";
@@ -238,6 +241,11 @@ public class ClanFragment extends Fragment implements AllClansAdapter.OnJoinClic
                 });
     }
 
+    /**
+     * Called when the "Join" button is clicked.
+     * @param clan The clan to join.
+     * @param joinButton The button that was clicked.
+     */
     @Override
     public void onJoinClick(Clan clan, Button joinButton) {
         if (currentUser == null) {
@@ -278,6 +286,9 @@ public class ClanFragment extends Fragment implements AllClansAdapter.OnJoinClic
                 });
     }
 
+    /**
+     * Refreshes the clan data.
+     */
     public void refreshClanData() {
         Log.d(TAG, "Refreshing clan data...");
         checkUserClanStatus();

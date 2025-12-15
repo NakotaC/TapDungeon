@@ -17,6 +17,9 @@ import com.example.tapdungeon.data.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity for the events screen.
+ */
 public class EventsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;

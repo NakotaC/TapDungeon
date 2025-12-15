@@ -9,14 +9,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tapdungeon.R;
 import java.util.List;
 
+/**
+ * Adapter for the clan members list in the social dialog.
+ */
 public class ClanMemberAdapter extends RecyclerView.Adapter<ClanMemberAdapter.MemberViewHolder> {
 
     private final List<ClanMember> memberList;
 
+    /**
+     * Constructor for the clan member adapter.
+     * @param memberList
+     */
     public ClanMemberAdapter(List<ClanMember> memberList) {
         this.memberList = memberList;
     }
 
+    /**
+     * Creates a new ViewHolder for the adapter.
+     * @param parent The ViewGroup into which the new View will be added after it is bound to
+     *               an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public MemberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -24,6 +38,12 @@ public class ClanMemberAdapter extends RecyclerView.Adapter<ClanMemberAdapter.Me
         return new MemberViewHolder(view);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull MemberViewHolder holder, int position) {
         ClanMember member = memberList.get(position);
@@ -31,6 +51,10 @@ public class ClanMemberAdapter extends RecyclerView.Adapter<ClanMemberAdapter.Me
         holder.level.setText("Level: " + member.getLevel());
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     * @return The total number of items in this adapter.
+     */
     @Override
     public int getItemCount() {
         return memberList.size();

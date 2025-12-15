@@ -6,16 +6,27 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.tapdungeon.social.clan.ClanFragment;
 
+/**
+ * Adapter for the social dialog.
+ */
 public class SocialPagerAdapter extends FragmentStateAdapter {
 
+    /**
+     * Constructor for the social pager adapter.
+     * @param fragment fragment that contains the adapter
+     */
     public SocialPagerAdapter(@NonNull Fragment fragment) {
         super(fragment);
     }
 
+    /**
+     * Creates a new fragment based on the position.
+     * @param position position of the fragment
+     * @return new fragment
+     */
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        // Return a NEW fragment instance in createFragment(int)
         if (position == 0) {
             return new ClanFragment();
         } else {
@@ -23,9 +34,12 @@ public class SocialPagerAdapter extends FragmentStateAdapter {
         }
     }
 
+    /**
+     * Returns the number of tabs.
+     * @return number of tabs
+     */
     @Override
     public int getItemCount() {
-        // We have two tabs
         return 2;
     }
 }

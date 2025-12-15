@@ -22,6 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Dialog fragment for creating a new clan.
+ */
 public class CreateClanDialogFragment extends DialogFragment {
 
     private static final String TAG = "CreateClanDialog";
@@ -39,6 +42,13 @@ public class CreateClanDialogFragment extends DialogFragment {
         return inflater.inflate(R.layout.dialog_create_clan, container, false);
     }
 
+    /**
+     * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}
+     * has returned, but before any saved state has been restored
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
